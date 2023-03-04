@@ -43,6 +43,7 @@ class PicsCubit extends Cubit<PicsState> {
     if (pageValid) {
       await loadPhotos();
     } else {
+      previousPage();
       emit(const UIMessage(
         'Page not found',
         false,
@@ -64,6 +65,7 @@ class PicsCubit extends Cubit<PicsState> {
 
   void setPageSize(int size) async {
     _pageSizeController.add(size);
+    _api.resetPage();
     await loadPhotos();
   }
 

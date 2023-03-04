@@ -6,7 +6,7 @@ void main() {
     late PhotoRepository repository;
 
     setUp(() {
-      repository = PhotoRepository(3);
+      repository = PhotoRepository();
     });
 
     test('adds photos to cache', () {

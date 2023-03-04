@@ -6,13 +6,12 @@ class PhotoRepository {
   String filter;
   final List<Photo> _cache;
   final List<Photo> _filtered;
-  final int pageCount;
+  bool reachedMaxPage = false;
 
-  PhotoRepository(
-    this.pageCount, {
+  PhotoRepository({
     this.currentPage = 1,
     this.limit = 30,
-    this.filter = '',
+    this.filter = '',   
   })  : _cache = [],
         _filtered = [];
 

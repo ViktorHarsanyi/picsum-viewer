@@ -13,7 +13,7 @@ class PhotoService {
   const PhotoService._internal(this._client, this._repository);
 
   static final PhotoService _instance =
-      PhotoService._internal(http.Client(), PhotoRepository(11));
+      PhotoService._internal(http.Client(), PhotoRepository());
 
   final http.Client _client;
   final PhotoRepository _repository;
@@ -40,7 +40,12 @@ class PhotoService {
       final List<dynamic> data = jsonDecode(response.body);
       final List<Photo> photos =
           data.map((json) => Photo.fromJson(json)).toList();
-      _repository.addPhotos(photos);
+      if(photos.isEmpty) {
+        _repository.reachedMaxPage = true;
+
+      } else {
+        _repository.addPhotos(photos);
+      }
       return _repository.cachedPhotos;
     } else {
       return _repository.cachedPhotos.isNotEmpty
@@ -50,7 +55,7 @@ class PhotoService {
   }
 
   bool nextPage() {
-    if (_repository.pageCount > _repository.currentPage) {
+    if (!_repository.reachedMaxPage) {
       _repository.currentPage += 1;
       return true;
     } else {
@@ -59,6 +64,7 @@ class PhotoService {
   }
 
   bool previousPage() {
+    _repository.reachedMaxPage = false;
     if (_repository.currentPage > 1) {
       _repository.currentPage -= 1;
       return true;
@@ -68,6 +74,10 @@ class PhotoService {
 
   void resetFilter() {
     _repository.filter = '';
+  }
+
+  void resetPage(){
+    _repository.currentPage = 1;
   }
 
   List<Photo> filter(String runes) {

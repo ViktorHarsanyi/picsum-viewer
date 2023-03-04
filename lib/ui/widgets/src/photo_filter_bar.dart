@@ -29,6 +29,7 @@ class _PhotoFilterBarState extends State<PhotoFilterBar> {
               ),
               Expanded(
                 child: Container(
+                  padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
